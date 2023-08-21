@@ -1,0 +1,4 @@
+pipreqs==0.4.13
+Requests==2.31.0
+tqdm==4.66.1
+json==2.0.9
