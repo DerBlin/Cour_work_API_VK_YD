@@ -18,9 +18,10 @@ TOKEN = 'vk1.a.lsoSb55QwucYyKD6fxjcE7nQERq4rnY2VTyHeTFzpUfFkE3HF5pkV18b18Jmn1fQW
         '983N7XOCmXx6mRODscdXWSydLRw'
 owner_id = input('Введите id пользователя ВК:')
 version = '5.131'
+token_yandex_disk = input('Введите токен с Полигона Яндекс.Диска:')
 
 
-class VK_api:
+class PhotoVk:
     api_base_url = 'https://api.vk.com/method'
 
     def get_photos(token, owner_id):
@@ -70,10 +71,9 @@ class VK_api:
         return url_photo_dict
 
 
-class yandex_disk:
+class YandexDisk:
 
-    def upload_photo(url_photo_dict):
-        token_yandex_disk = input('Введите токен с Полигона Яндекс.Диска:')
+    def create_folder(self):
         base_url_for_folder = 'https://cloud-api.yandex.net'
         # Создание папки на Яндекс диске
         headers = {
@@ -83,6 +83,8 @@ class yandex_disk:
         response = requests.put(f'{base_url_for_folder}/v1/disk/resources',
                                 params=params,
                                 headers=headers)
+
+    def upload_photo(url_photo_dict):
         # Загрузка фото в папку на диск
         for item in tqdm(url_photo_dict.items(), desc='Upload photo to the disk'):
             base_url = 'https://cloud-api.yandex.net/v1/disk/resources/upload'
@@ -91,8 +93,9 @@ class yandex_disk:
             requests.post(base_url, headers=headers, params=params)
 
 
-VK_api.get_photos(TOKEN, owner_id)
-yandex_disk.upload_photo(VK_api.get_photos(TOKEN, owner_id))
+PhotoVk.get_photos(TOKEN, owner_id)
+YandexDisk.create_folder(token_yandex_disk)
+YandexDisk.upload_photo(PhotoVk.get_photos(TOKEN, owner_id))
 
 
 
